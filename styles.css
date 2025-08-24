@@ -1,0 +1,605 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Helvetica Neue', sans-serif;
+    background: #000000;
+    color: #ffffff;
+    overflow: hidden;
+    height: 100vh;
+    cursor: grab;
+}
+
+body.dragging {
+    cursor: grabbing;
+    user-select: none;
+}
+
+/* Main scroll container */
+.scroll-container {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+.content-wrapper {
+    display: flex;
+    height: 100vh;
+    width: max-content;
+    transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform;
+}
+
+/* Individual sections */
+.section {
+    height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+/* Hero Section */
+.hero-section {
+    width: 100vw;
+    overflow: hidden;
+}
+
+.hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.hero-image {
+    width: 100vw;
+    height: 1024px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.vertical-line {
+    position: absolute;
+    height: 100vh;
+    width: 1px;
+    background-color: #000000;
+    opacity: 1;
+}
+
+.vertical-line img {
+    display: none; /* Hide the SVG images, use CSS lines instead */
+}
+
+.hero-section .line-1 {
+    left: 72px;
+}
+
+.hero-section .line-2 {
+    left: 422px;
+}
+
+.hero-section .line-3 {
+    left: 708px;
+}
+
+.hero-section .line-4 {
+    left: 1232px;
+}
+
+.scroll-indicator-box {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 166px;
+    height: 100vh;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.scroll-indicator {
+    position: relative;
+    width: 18px;
+    height: 364.828px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+}
+
+.scroll-indicator p {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 16px;
+    color: #000000;
+    letter-spacing: 4.16px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    line-height: 1;
+    transform: rotate(180deg);
+    margin: 0;
+}
+
+.hero-title {
+    position: absolute;
+    left: 68px;
+    top: 62px;
+    width: 1085px;
+}
+
+.hero-title h1 {
+    font-family: 'Emberly', sans-serif;
+    font-size: 248px;
+    color: #ffffff;
+    line-height: normal;
+    font-weight: normal;
+}
+
+.hero-description {
+    position: absolute;
+    left: 80px;
+    bottom: 235px;
+    width: 647px;
+}
+
+.hero-description p {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 24px;
+    color: #ffffff;
+    line-height: normal;
+}
+
+/* Text Section */
+.text-section {
+    width: 1642px;
+    background: #000000;
+    padding: 0 64px;
+    gap: 93px;
+    justify-content: flex-start;
+}
+
+.text-section .vertical-line {
+    left: calc(644px + 64px + 46.5px); /* text-content width + padding + half of gap */
+    background-color: #ffffff;
+    z-index: 1;
+}
+
+.text-content {
+    width: 644px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.text-content h2 {
+    font-family: 'Emberly', sans-serif;
+    font-size: 96px;
+    color: #ffffff;
+    line-height: normal;
+    width: 100%;
+}
+
+.content-columns {
+    width: 661px;
+    display: flex;
+    flex-direction: column;
+    gap: 41px;
+}
+
+.column-text {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+}
+
+.column-text h3 {
+    font-family: 'Emberly', sans-serif;
+    font-size: 96px;
+    color: #ffffff;
+    line-height: normal;
+    width: 644px;
+}
+
+.column-text p {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 20px;
+    color: #ffffff;
+    line-height: normal;
+    width: 644px;
+}
+
+.column-image {
+    width: 100%;
+    aspect-ratio: 768/537;
+}
+
+.column-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Image Background Section */
+.image-bg-section {
+    width: 1642px;
+    position: relative;
+    padding: 89px 99px;
+}
+
+.image-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.image-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.overlay-content {
+    position: relative;
+    z-index: 2;
+    width: 644px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.overlay-content h2 {
+    font-family: 'Emberly', sans-serif;
+    font-size: 96px;
+    color: #ffffff;
+    line-height: normal;
+}
+
+/* Final Section */
+.final-section {
+    width: 1642px;
+    background: #000000;
+    padding: 0 64px;
+    gap: 93px;
+    justify-content: flex-start;
+}
+
+.final-section .vertical-line {
+    left: calc(644px + 64px + 46.5px); /* final-left width + padding + half of gap */
+    background-color: #ffffff;
+    z-index: 1;
+}
+
+.final-content {
+    display: flex;
+    align-items: center;
+    gap: 93px;
+    width: 100%;
+}
+
+.final-left {
+    width: 644px;
+    display: flex;
+    flex-direction: column;
+    gap: 175px;
+    align-items: center;
+}
+
+.final-left h3 {
+    font-family: 'Emberly', sans-serif;
+    font-size: 96px;
+    color: #ffffff;
+    line-height: normal;
+    width: 628px;
+}
+
+.final-image {
+    width: 100%;
+    aspect-ratio: 768/537;
+}
+
+.final-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.final-right {
+    width: 661px;
+    display: flex;
+    flex-direction: column;
+    gap: 41px;
+}
+
+.text-block {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+}
+
+.text-block h4 {
+    font-family: 'Emberly', sans-serif;
+    font-size: 40px;
+    color: #ffffff;
+    line-height: normal;
+    width: 644px;
+}
+
+.text-block p {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 20px;
+    color: #ffffff;
+    line-height: normal;
+    width: 644px;
+}
+
+/* White Section */
+.white-section {
+    width: 1642px;
+    background: #ffffff;
+    padding: 0 64px;
+    gap: 93px;
+    justify-content: flex-start;
+}
+
+.white-section .vertical-line {
+    left: calc(644px + 64px + 46.5px);
+    background-color: #000000;
+    z-index: 1;
+}
+
+.white-content {
+    display: flex;
+    align-items: center;
+    gap: 93px;
+    width: 100%;
+}
+
+.white-left {
+    width: 644px;
+    height: 895.297px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.white-left h3 {
+    font-family: 'Emberly', sans-serif;
+    font-weight: bold;
+    font-size: 101px;
+    color: #000000;
+    line-height: normal;
+    width: 628px;
+    text-align: center;
+}
+
+.white-image {
+    width: 100%;
+    aspect-ratio: 768/537;
+}
+
+.white-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.white-right {
+    width: 661px;
+    display: flex;
+    flex-direction: column;
+    gap: 41px;
+}
+
+.white-section .text-block h4 {
+    font-family: 'Emberly', sans-serif;
+    font-weight: bold;
+    font-size: 64px;
+    color: #000000;
+    line-height: normal;
+    width: 644px;
+}
+
+.white-section .text-block:first-child h4 {
+    font-size: 64px;
+    font-weight: bold;
+}
+
+.white-section .text-block:last-child h4 {
+    font-size: 40px;
+    font-weight: normal;
+}
+
+.white-section .text-block p {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 20px;
+    color: #000000;
+    line-height: normal;
+    width: 644px;
+}
+
+/* New Background Image Section */
+.new-bg-section {
+    width: 1540px;
+    position: relative;
+}
+
+.new-bg {
+    width: 100%;
+    height: 100vh;
+}
+
+.new-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Parallax effects */
+.section {
+    transform-style: preserve-3d;
+}
+
+.hero-image {
+    transition: transform 0.3s ease-out;
+}
+
+.vertical-line {
+    transition: opacity 0.3s ease-out;
+}
+
+/* Smooth scrolling animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes subtleSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes gentleScale {
+    from {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Enhanced but subtle text animations */
+.section.in-view .hero-title h1 {
+    animation: fadeInUp 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    animation-delay: 0.2s;
+    opacity: 0;
+}
+
+.section.in-view .hero-description p {
+    animation: subtleSlideIn 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    animation-delay: 0.6s;
+    opacity: 0;
+}
+
+.section.in-view .text-content h2 {
+    animation: fadeInUp 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    animation-delay: 0.3s;
+    opacity: 0;
+}
+
+.section.in-view .overlay-content h2 {
+    animation: fadeInUp 1.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    animation-delay: 0.4s;
+    opacity: 0;
+}
+
+.section.in-view .column-text h3 {
+    animation: fadeInUp 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    animation-delay: 0.4s;
+    opacity: 0;
+}
+
+.section.in-view .column-text p {
+    animation: subtleSlideIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    animation-delay: 0.6s;
+    opacity: 0;
+}
+
+.section.in-view .white-left h3 {
+    animation: fadeInUp 1.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    animation-delay: 0.2s;
+    opacity: 0;
+}
+
+.section.in-view .text-block {
+    animation: subtleSlideIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    opacity: 0;
+}
+
+.section.in-view .text-block:nth-child(1) {
+    animation-delay: 0.3s;
+}
+
+.section.in-view .text-block:nth-child(2) {
+    animation-delay: 0.5s;
+}
+
+.section.in-view .final-left h3 {
+    animation: fadeInUp 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    animation-delay: 0.2s;
+    opacity: 0;
+}
+
+/* Initial hidden state for animated elements */
+.hero-title h1,
+.hero-description p,
+.text-content h2,
+.overlay-content h2,
+.column-text h3,
+.column-text p,
+.white-left h3,
+.text-block,
+.final-left h3 {
+    opacity: 0;
+}
+
+/* Responsive design */
+@media (max-width: 1400px) {
+    .hero-title h1 {
+        font-size: 280px;
+    }
+    
+    .text-content h2,
+    .final-left h3 {
+        font-size: 72px;
+    }
+    
+    .overlay-content h2 {
+        font-size: 72px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .hero-title h1 {
+        font-size: 220px;
+    }
+    
+    .text-content h2,
+    .final-left h3 {
+        font-size: 48px;
+    }
+    
+    .overlay-content h2 {
+        font-size: 48px;
+    }
+    
+    .hero-description p {
+        font-size: 24px;
+    }
+}
