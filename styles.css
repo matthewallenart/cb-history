@@ -41,6 +41,22 @@ body.dragging {
     display: flex;
     align-items: center;
     flex-shrink: 0;
+    transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+}
+
+/* Enhanced styling for overlay sections */
+.text-section,
+.white-section,
+.final-section {
+    z-index: 2;
+    position: relative;
+}
+
+/* Image sections stay behind */
+.hero-section,
+.image-bg-section,
+.new-bg-section {
+    z-index: 1;
 }
 
 /* Hero Section */
@@ -62,6 +78,8 @@ body.dragging {
     height: 1024px;
     object-fit: cover;
     object-position: center;
+    opacity: 0;
+    filter: brightness(0);
 }
 
 .vertical-line {
@@ -89,6 +107,40 @@ body.dragging {
 }
 
 .hero-section .line-4 {
+    left: 1232px;
+}
+
+/* Vertical lines for image-bg-section */
+.image-bg-section .line-1 {
+    left: 72px;
+}
+
+.image-bg-section .line-2 {
+    left: 422px;
+}
+
+.image-bg-section .line-3 {
+    left: 708px;
+}
+
+.image-bg-section .line-4 {
+    left: 1232px;
+}
+
+/* Vertical lines for new-bg-section */
+.new-bg-section .line-1 {
+    left: 72px;
+}
+
+.new-bg-section .line-2 {
+    left: 422px;
+}
+
+.new-bg-section .line-3 {
+    left: 708px;
+}
+
+.new-bg-section .line-4 {
     left: 1232px;
 }
 
@@ -158,11 +210,12 @@ body.dragging {
 
 /* Text Section */
 .text-section {
-    width: 1642px;
+    width: 1642px; /* Back to original width since no overlap needed */
     background: #000000;
     padding: 0 64px;
     gap: 93px;
     justify-content: flex-start;
+    /* No margin-left for section 2 to ensure proper animation triggers */
 }
 
 .text-section .vertical-line {
@@ -202,7 +255,7 @@ body.dragging {
 
 .column-text h3 {
     font-family: 'Emberly', sans-serif;
-    font-size: 96px;
+    font-size: 74px;
     color: #ffffff;
     line-height: normal;
     width: 644px;
@@ -229,9 +282,10 @@ body.dragging {
 
 /* Image Background Section */
 .image-bg-section {
-    width: 1642px;
+    width: 1800px; /* Increased from 1642px to create overlap */
     position: relative;
     padding: 89px 99px;
+    margin-left: -80px; /* Negative margin to overlap previous section */
 }
 
 .image-bg {
@@ -267,11 +321,12 @@ body.dragging {
 
 /* Final Section */
 .final-section {
-    width: 1642px;
+    width: 1800px; /* Increased from 1642px to create overlap */
     background: #000000;
     padding: 0 64px;
     gap: 93px;
     justify-content: flex-start;
+    margin-left: -80px; /* Negative margin to overlap previous section */
 }
 
 .final-section .vertical-line {
@@ -346,11 +401,12 @@ body.dragging {
 
 /* White Section */
 .white-section {
-    width: 1642px;
+    width: 1800px; /* Increased from 1642px to create overlap */
     background: #ffffff;
     padding: 0 64px;
     gap: 93px;
     justify-content: flex-start;
+    margin-left: -80px; /* Negative margin to overlap previous section */
 }
 
 .white-section .vertical-line {
@@ -368,7 +424,7 @@ body.dragging {
 
 .white-left {
     width: 644px;
-    height: 895.297px;
+    height: 86vh;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -432,8 +488,9 @@ body.dragging {
 
 /* New Background Image Section */
 .new-bg-section {
-    width: 1540px;
+    width: 1700px; /* Increased from 1540px to create overlap */
     position: relative;
+    margin-left: -80px; /* Negative margin to overlap previous section */
 }
 
 .new-bg {
@@ -472,6 +529,28 @@ body.dragging {
     }
 }
 
+@keyframes fadeInUpStraight {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeFromBlack {
+    from {
+        opacity: 0;
+        filter: brightness(0);
+    }
+    to {
+        opacity: 1;
+        filter: brightness(1);
+    }
+}
+
 @keyframes subtleSlideIn {
     from {
         opacity: 0;
@@ -495,45 +574,50 @@ body.dragging {
 }
 
 /* Enhanced but subtle text animations */
+.section.in-view .hero-image {
+    animation: fadeFromBlack 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    animation-delay: 0s;
+}
+
 .section.in-view .hero-title h1 {
-    animation: fadeInUp 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-    animation-delay: 0.2s;
+    animation: fadeInUpStraight 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    animation-delay: 0.8s;
     opacity: 0;
 }
 
 .section.in-view .hero-description p {
-    animation: subtleSlideIn 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-    animation-delay: 0.6s;
+    animation: fadeInUpStraight 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    animation-delay: 1.5s;
     opacity: 0;
 }
 
 .section.in-view .text-content h2 {
     animation: fadeInUp 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-    animation-delay: 0.3s;
+    animation-delay: 0s; /* Removed delay so animation starts immediately */
     opacity: 0;
 }
 
 .section.in-view .overlay-content h2 {
     animation: fadeInUp 1.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-    animation-delay: 0.4s;
+    animation-delay: 0s; /* Removed delay - start immediately */
     opacity: 0;
 }
 
 .section.in-view .column-text h3 {
     animation: fadeInUp 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-    animation-delay: 0.4s;
+    animation-delay: 0.2s; /* Reduced from 0.4s */
     opacity: 0;
 }
 
 .section.in-view .column-text p {
     animation: subtleSlideIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-    animation-delay: 0.6s;
+    animation-delay: 0.3s; /* Reduced from 0.6s */
     opacity: 0;
 }
 
 .section.in-view .white-left h3 {
     animation: fadeInUp 1.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-    animation-delay: 0.2s;
+    animation-delay: 0s; /* Removed delay - start immediately */
     opacity: 0;
 }
 
@@ -543,16 +627,16 @@ body.dragging {
 }
 
 .section.in-view .text-block:nth-child(1) {
-    animation-delay: 0.3s;
+    animation-delay: 0.1s; /* Reduced from 0.3s */
 }
 
 .section.in-view .text-block:nth-child(2) {
-    animation-delay: 0.5s;
+    animation-delay: 0.2s; /* Reduced from 0.5s */
 }
 
 .section.in-view .final-left h3 {
     animation: fadeInUp 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-    animation-delay: 0.2s;
+    animation-delay: 0s; /* Removed delay - start immediately */
     opacity: 0;
 }
 

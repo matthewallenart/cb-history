@@ -161,23 +161,75 @@ class ParallaxScroller {
             const sectionCenter = sectionRect.left + sectionRect.width / 2;
             const viewportCenter = window.innerWidth / 2;
             const distance = (sectionCenter - viewportCenter) / window.innerWidth;
+            const absDistance = Math.abs(distance);
             
-            // Parallax effect for background images
+            // Enhanced parallax effect for background images
             const heroImage = section.querySelector('.hero-image');
             if (heroImage) {
-                const parallaxX = distance * 50;
-                heroImage.style.transform = `translateX(${parallaxX}px)`;
+                const parallaxX = distance * 40; // Increased from 4 for more dramatic effect
+                heroImage.style.transform = `translateX(${parallaxX}px) scale(${1 + absDistance * 0.03})`;
             }
             
-            // Subtle parallax for text elements with gentle movement
-            const textElements = section.querySelectorAll('h1, h2, h3, p');
-            textElements.forEach((element, elementIndex) => {
-                const parallaxY = distance * (3 + elementIndex * 1); // Reduced movement
-                const opacity = 1 - Math.abs(distance) * 0.2; // Subtle fade
+            // Parallax for other background images
+            const bgImage = section.querySelector('.image-bg img, .new-bg img');
+            if (bgImage) {
+                const parallaxX = distance * 35; // Increased from 3 for more movement
+                bgImage.style.transform = `translateX(${parallaxX}px) scale(${1 + absDistance * 0.025})`;
+            }
+            
+            // Strong parallax for overlapping sections (dramatic overlay effect)
+            if (section.classList.contains('text-section') || 
+                section.classList.contains('white-section') || 
+                section.classList.contains('final-section')) {
                 
-                element.style.transform = `translateY(${parallaxY}px)`;
-                element.style.opacity = Math.max(0.7, opacity); // Keep readable
-            });
+                // Much stronger movement now that overlaps prevent gaps
+                const sectionParallax = distance * 80; // Increased from 5 for dramatic effect
+                const scaleEffect = 1 + absDistance * 0.02; // More noticeable scaling
+                section.style.transform = `translateX(${sectionParallax}px) scale(${scaleEffect})`;
+                
+                // Remove all box shadows
+                section.style.boxShadow = 'none';
+            }
+            
+            // Enhanced parallax for image sections too
+            if (section.classList.contains('image-bg-section') || 
+                section.classList.contains('new-bg-section')) {
+                const sectionParallax = distance * 20; // Moderate movement for image sections
+                section.style.transform = `translateX(${sectionParallax}px)`;
+                
+                // Remove all box shadows
+                section.style.boxShadow = 'none';
+            }
+            
+            // Reset hero section transform and ensure no shadows
+            if (section.classList.contains('hero-section')) {
+                section.style.transform = 'none';
+                section.style.boxShadow = 'none';
+            }
+            
+            // Enhanced parallax for text elements (exclude hero section, white section, and final section)
+            if (!section.classList.contains('hero-section') && 
+                !section.classList.contains('white-section') &&
+                !section.classList.contains('final-section')) {
+                const textElements = section.querySelectorAll('h1, h2, h3, p');
+                textElements.forEach((element, elementIndex) => {
+                    const parallaxY = distance * (3 + elementIndex * 0.5); // Increased movement
+                    const opacity = 1 - Math.abs(distance) * 0.15; // More dramatic fade
+                    
+                    element.style.transform = `translateY(${parallaxY}px)`;
+                    element.style.opacity = Math.max(0.7, opacity); // Allow more fade but keep readable
+                });
+            }
+            
+            // Reset transforms for white section and final section text elements to prevent unwanted movement
+            if (section.classList.contains('white-section') || 
+                section.classList.contains('final-section')) {
+                const textElements = section.querySelectorAll('h1, h2, h3, h4, p');
+                textElements.forEach((element) => {
+                    element.style.transform = 'none';
+                    element.style.opacity = '';
+                });
+            }
         });
     }
     
